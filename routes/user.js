@@ -47,10 +47,6 @@ router.post("/register", function(request, response) {
 
     let user = request.body;
 
-    console.log(request.body.email);
-    console.log(user.email);
-
-
     User.create(user, function(err, doc) {
 
         if(err) {
@@ -76,10 +72,6 @@ router.delete("/remove/:id", function(request, response) {
     let id = request.params.id;
 
     User.destroy(id, function(err, user) {
-
-        console.log("User.destroy");
-        console.log(err);
-        console.log(user);
 
         if(err) {
             console.log(err);
