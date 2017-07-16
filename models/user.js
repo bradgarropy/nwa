@@ -26,6 +26,15 @@ function read(callback) {
 }
 
 
+function destroy(id, callback) {
+
+    console.log("destroy");
+
+    User.findByIdAndRemove(id, callback);
+}
+
+
 // exports
 exports.create  = create;
 exports.read    = read;
+exports.destroy = destroy;
