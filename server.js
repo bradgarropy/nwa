@@ -13,9 +13,6 @@ const app = express();
 // create database
 mongoose.connect("mongodb://admin:password@ds159662.mlab.com:59662/node-web-app-template", {useMongoClient: true});
 
-// locals
-app.locals.moment = require("moment");
-
 
 // app settings
 app.set("json spaces", 4);
