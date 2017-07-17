@@ -18,5 +18,21 @@ function encrypt(password, callback) {
 }
 
 
+function validate(password, hash, callback) {
+
+    bcrypt.compare(password, hash, function(err, result) {
+
+        if(err) {
+            console.log(err);
+            throw err;
+        }
+        else {
+            callback(err, result);
+        }
+    });
+}
+
+
 // exports
-exports.encrypt = encrypt;
+exports.validate = validate;
+exports.encrypt  = encrypt;

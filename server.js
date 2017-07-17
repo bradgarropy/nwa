@@ -1,5 +1,6 @@
 const bodyparser = require("body-parser");
 const mongoose   = require("mongoose");
+const passport   = require("./middleware/passport");
 const express    = require("express");
 const logger     = require("./middleware/logger");
 const index      = require("./routes/index");
@@ -22,8 +23,9 @@ app.set("view engine", "pug");
 
 // middleware
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded( {extended: true} ));
+app.use(bodyparser.urlencoded({extended: true}));
 app.use(logger.log);
+app.use(passport.initialize());
 
 
 // index routes

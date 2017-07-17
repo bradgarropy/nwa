@@ -1,4 +1,5 @@
-const password = require("../middleware/password.js");
+const passport = require("../middleware/passport");
+const password = require("../middleware/password");
 const express  = require("express");
 const User     = require("../models/user");
 
@@ -30,6 +31,15 @@ router.get("/login", function(request, response) {
 
     // send response
     response.render("login");
+
+});
+
+
+// http post
+router.post("/login", passport.authenticate("local", {session: false}), function(request, response) {
+
+    // send response
+    response.render("success");
 
 });
 
@@ -70,7 +80,7 @@ router.post("/register", function(request, response) {
                 }
                 else {
                     // send response
-                    response.json(doc);
+                    response.render("success");
                 }
             });
         }
@@ -83,7 +93,7 @@ router.delete("/remove/:id", function(request, response) {
 
     let id = request.params.id;
 
-    User.destroy(id, function(err, user) {
+    User.findByIdAndRemove(id, function(err, user) {
 
         if(err) {
             console.log(err);
@@ -93,8 +103,6 @@ router.delete("/remove/:id", function(request, response) {
 
             // descriptive message
             let message = `User with ID '${id}' does not exist.`;
-
-            console.log(message);
 
             // send response
             response.status(404);
