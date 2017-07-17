@@ -1,15 +1,13 @@
-const _ = require("lodash");
+const moment = require("moment");
 
 
 function log(request, response, next) {
 
-    // log request
-    console.log(request.method + " " +  request.originalUrl);
+    let date = moment().format("MM-DD-YYYY hh:mm:ss a");
+    let message = `[${date}] "${request.method} ${request.url}" ${JSON.stringify(request.body)}`;
 
-    // log body if it exists
-    if(!_.isEmpty(request.body)) {
-        console.log(request.body);
-    }
+    // log request
+    console.log(message);
 
     next();
 }
