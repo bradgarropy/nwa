@@ -1,5 +1,6 @@
-const express = require("express");
-const User  = require("../models/user");
+const password = require("../middleware/password.js");
+const express  = require("express");
+const User     = require("../models/user");
 
 
 // create router
@@ -47,20 +48,31 @@ router.post("/register", function(request, response) {
 
     let user = request.body;
 
-    User.create(user, function(err, doc) {
+    password.encrypt(user.password, function(err, hash) {
 
         if(err) {
-
-            // descriptive message
-            let message = `User with email '${user.email}' already exists.`;
-
-            // send response
-            response.status(409);
-            response.json( {message: message, error: err} );
+            console.log(err);
+            throw err;
         }
         else {
-            // send response
-            response.json(doc);
+            user.password = hash;
+
+            User.create(user, function(err, doc) {
+
+                if(err) {
+
+                    // descriptive message
+                    let message = `User with email '${user.email}' already exists.`;
+
+                    // send response
+                    response.status(409);
+                    response.json( {message: message, error: err} );
+                }
+                else {
+                    // send response
+                    response.json(doc);
+                }
+            });
         }
     });
 });

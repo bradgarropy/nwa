@@ -2,7 +2,6 @@ const bodyparser = require("body-parser");
 const mongoose   = require("mongoose");
 const express    = require("express");
 const logger     = require("./middleware/logger");
-const weight     = require("./routes/weight");
 const index      = require("./routes/index");
 const user       = require("./routes/user");
 
@@ -35,9 +34,6 @@ app.use("/", index);
 
 // user routes
 app.use("/user", user);
-
-// weight routes
-app.use("/api/weight", weight);
 
 
 // start application

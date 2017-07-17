@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const password = require("../middleware/password");
 
 
 // define schema
