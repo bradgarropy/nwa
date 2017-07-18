@@ -37,7 +37,7 @@ router.get("/login", function(request, response) {
 
 
 // http post
-router.post("/login", passport.authenticate("local", {session: false}), function(request, response) {
+router.post("/login", passport.authenticate("local"), function(request, response) {
 
     // send response
     response.render("success");

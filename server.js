@@ -3,7 +3,9 @@ const validator  = require("express-validator");
 const mongoose   = require("mongoose");
 const passport   = require("./middleware/passport");
 const express    = require("express");
+const session    = require("express-session");
 const logger     = require("./middleware/logger");
+const flash      = require("connect-flash");
 const index      = require("./routes/index");
 const user       = require("./routes/user");
 
@@ -26,8 +28,11 @@ app.set("view engine", "pug");
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(validator());
-app.use(logger.log);
+app.use(session({secret: "keyboard cat", resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+app.use(logger.log);
 
 
 // index routes
