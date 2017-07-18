@@ -35,6 +35,21 @@ app.use(flash());
 app.use(logger.log);
 
 
+// user
+app.use(function(request, response, next) {
+
+    if(request.user) {
+        response.locals.user = request.user;
+    }
+    else {
+        response.locals.user = null;
+    }
+
+    // next middleware
+    next();
+});
+
+
 // index routes
 app.use("/", index);
 

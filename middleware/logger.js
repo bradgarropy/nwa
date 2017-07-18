@@ -3,6 +3,7 @@ const moment = require("moment");
 
 function log(request, response, next) {
 
+    // get user
     var user;
     if(request.user) {
         user = request.user.email;
@@ -11,12 +12,16 @@ function log(request, response, next) {
         user = "none";
     }
 
+    // get date
     let date = moment().format("MM-DD-YYYY hh:mm:ss a");
+
+    // create log entry
     let message = `[${date}] (${user}) "${request.method} ${request.url}" ${JSON.stringify(request.body)}`;
 
-    // log request
+    // log it
     console.log(message);
 
+    // next middleware
     next();
 }
 
