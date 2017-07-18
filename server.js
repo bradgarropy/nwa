@@ -1,4 +1,5 @@
 const bodyparser = require("body-parser");
+const validator  = require("express-validator");
 const mongoose   = require("mongoose");
 const passport   = require("./middleware/passport");
 const express    = require("express");
@@ -24,6 +25,7 @@ app.set("view engine", "pug");
 // middleware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
+app.use(validator());
 app.use(logger.log);
 app.use(passport.initialize());
 

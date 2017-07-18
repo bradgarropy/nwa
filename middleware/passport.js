@@ -1,6 +1,6 @@
 const Strategy = require("passport-local").Strategy;
 const passport = require("passport");
-const psswrd   = require("./password");
+const Password = require("./password");
 const bcrypt   = require("bcryptjs");
 const User     = require("../models/user");
 
@@ -20,7 +20,7 @@ let strat = new Strategy({usernameField: "email"}, function(email, password, don
             return done(null, false, {message: message});
         }
 
-        psswrd.validate(password, user.password, function(err, result) {
+        Password.validate(password, user.password, function(err, result) {
 
             if(err) {
                 console.log(err);

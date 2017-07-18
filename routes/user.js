@@ -1,7 +1,8 @@
-const passport = require("../middleware/passport");
-const password = require("../middleware/password");
-const express  = require("express");
-const User     = require("../models/user");
+const validator = require("express-validator");
+const passport  = require("../middleware/passport");
+const password  = require("../middleware/password");
+const express   = require("express");
+const User      = require("../models/user");
 
 
 // create router
@@ -56,31 +57,47 @@ router.get("/register", function(request, response) {
 // http post
 router.post("/register", function(request, response) {
 
-    let user = request.body;
+    // validate
+    request.checkBody("first_name",   "First name is required.").notEmpty();
+    request.checkBody("last_name",    "Last name is required.").notEmpty();
+    request.checkBody("email",        "Email is required.").notEmpty();
+    request.checkBody("email",        "Please enter a valid email.").isEmail();
+    request.checkBody("password",     "Password is required.").notEmpty();
+    request.checkBody("confirmation", "Password confirmation is required.").notEmpty();
+    request.checkBody("confirmation", "Passwords must match.").equals(request.body.password);
 
-    password.encrypt(user.password, function(err, hash) {
+    request.getValidationResult().then(function(errors) {
 
-        if(err) {
-            console.log(err);
-            throw err;
+        // form errors
+        if(!errors.isEmpty()) {
+            response.render("register", {errors: errors.array()});
         }
+        // hash password
         else {
-            user.password = hash;
 
-            User.create(user, function(err, doc) {
+            password.encrypt(request.body.password, function(err, hash) {
 
+                // encryption error
                 if(err) {
-
-                    // descriptive message
-                    let message = `User with email '${user.email}' already exists.`;
-
-                    // send response
-                    response.status(409);
-                    response.json( {message: message, error: err} );
+                    console.log(err);
+                    throw err;
                 }
+                // create user
                 else {
-                    // send response
-                    response.render("success");
+                    request.body.password = hash;
+
+                    User.create(request.body, function(err, doc) {
+
+                        // db create error
+                        if(err) {
+                            let errors = [{msg: `User with email '${request.body.email}' already exists.`}];
+                            response.render("register", {errors: errors});
+                        }
+                        // user registration success
+                        else {
+                            response.redirect("login");
+                        }
+                    });
                 }
             });
         }
