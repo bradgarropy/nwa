@@ -5,10 +5,8 @@ const express = require("express");
 const router = express.Router();
 
 
-// http get
 router.get("/", function(request, response) {
 
-    // send response
     response.render("index");
 
 });

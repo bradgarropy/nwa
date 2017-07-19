@@ -9,7 +9,6 @@ const User      = require("../models/user");
 const router = express.Router();
 
 
-// http get
 router.get("/", function(request, response) {
 
     User.read(function(err, users) {
@@ -18,43 +17,42 @@ router.get("/", function(request, response) {
             console.log(err);
             throw err;
         }
-        else {
-            // send response
-            response.json(users);
-        }
-    });
 
+        response.json(users);
+
+    });
 });
 
 
-// http get
 router.get("/login", function(request, response) {
 
-    // send response
     response.render("login");
 
 });
 
 
-// http post
 router.post("/login", passport.authenticate("local"), function(request, response) {
 
-    // send response
-    response.render("success");
+    response.redirect("/");
 
 });
 
 
-// http get
+router.get("/logout", function(request, response) {
+
+    request.logout();
+    response.redirect("/");
+
+});
+
+
 router.get("/register", function(request, response) {
 
-    // send response
     response.render("register");
 
 });
 
 
-// http post
 router.post("/register", function(request, response) {
 
     // validate
@@ -72,40 +70,36 @@ router.post("/register", function(request, response) {
         if(!errors.isEmpty()) {
             response.render("register", {errors: errors.array()});
         }
+
         // hash password
-        else {
+        password.encrypt(request.body.password, function(err, hash) {
 
-            password.encrypt(request.body.password, function(err, hash) {
+            // encryption error
+            if(err) {
+                console.log(err);
+                throw err;
+            }
 
-                // encryption error
+            // create user
+            request.body.password = hash;
+
+            User.create(request.body, function(err, doc) {
+
+                // db create error
                 if(err) {
-                    console.log(err);
-                    throw err;
+                    let errors = [{msg: `User with email '${request.body.email}' already exists.`}];
+                    response.render("register", {errors: errors});
                 }
-                // create user
-                else {
-                    request.body.password = hash;
 
-                    User.create(request.body, function(err, doc) {
+                // user registration success
+                response.redirect("login");
 
-                        // db create error
-                        if(err) {
-                            let errors = [{msg: `User with email '${request.body.email}' already exists.`}];
-                            response.render("register", {errors: errors});
-                        }
-                        // user registration success
-                        else {
-                            response.redirect("login");
-                        }
-                    });
-                }
             });
-        }
+        });
     });
 });
 
 
-// http delete
 router.delete("/remove/:id", function(request, response) {
 
     let id = request.params.id;
@@ -117,7 +111,6 @@ router.delete("/remove/:id", function(request, response) {
             throw err;
         }
         else if (user === null) {
-
             // descriptive message
             let message = `User with ID '${id}' does not exist.`;
 
@@ -125,10 +118,10 @@ router.delete("/remove/:id", function(request, response) {
             response.status(404);
             response.json( {message: message, error: err} );
         }
-        else {
-            // send response
-            response.json(user);
-        }
+
+        // user delete success
+        response.json(user);
+
     });
 });
 
