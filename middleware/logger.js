@@ -13,7 +13,7 @@ function log(request, response, next) {
     }
 
     // get date
-    let date = moment().format("MM-DD-YYYY hh:mm:ss a");
+    let date = moment().format("MM-DD-YYYY hh:mm:ss A");
 
     // create log entry
     let message = `[${date}] (${user}) "${request.method} ${request.url}" ${JSON.stringify(request.body)}`;

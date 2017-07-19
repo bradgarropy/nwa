@@ -1,9 +1,11 @@
 const bodyparser = require("body-parser");
 const validator  = require("express-validator");
 const mongoose   = require("mongoose");
+const messages   = require("express-messages");
 const passport   = require("./middleware/passport");
 const express    = require("express");
 const session    = require("express-session");
+const cookie     = require("cookie-parser");
 const logger     = require("./middleware/logger");
 const flash      = require("connect-flash");
 const index      = require("./routes/index");
@@ -27,12 +29,13 @@ app.set("view engine", "pug");
 // middleware
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
-app.use(validator());
+app.use(logger.log);
+app.use(cookie());
 app.use(session({secret: "keyboard cat", resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(validator());
 app.use(flash());
-app.use(logger.log);
 
 
 // user
@@ -47,6 +50,19 @@ app.use(function(request, response, next) {
 
     // next middleware
     next();
+
+});
+
+
+// messages
+app.use(function (request, response, next) {
+
+    // set messages
+    response.locals.messages = messages(request, response);
+
+    // next  middleware
+    next();
+
 });
 
 

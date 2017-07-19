@@ -9,24 +9,10 @@ const User      = require("../models/user");
 const router = express.Router();
 
 
-router.get("/", function(request, response) {
-
-    User.read(function(err, users) {
-
-        if(err) {
-            console.log(err);
-            throw err;
-        }
-
-        response.json(users);
-
-    });
-});
-
-
 router.get("/login", function(request, response) {
 
     response.render("login");
+    return;
 
 });
 
@@ -34,6 +20,7 @@ router.get("/login", function(request, response) {
 router.post("/login", passport.authenticate("local"), function(request, response) {
 
     response.redirect("/");
+    return;
 
 });
 
@@ -42,6 +29,7 @@ router.get("/logout", function(request, response) {
 
     request.logout();
     response.redirect("/");
+    return;
 
 });
 
@@ -49,13 +37,14 @@ router.get("/logout", function(request, response) {
 router.get("/register", function(request, response) {
 
     response.render("register");
+    return;
 
 });
 
 
 router.post("/register", function(request, response) {
 
-    // validate
+    // validation rules
     request.checkBody("first_name",   "First name is required.").notEmpty();
     request.checkBody("last_name",    "Last name is required.").notEmpty();
     request.checkBody("email",        "Email is required.").notEmpty();
@@ -64,11 +53,13 @@ router.post("/register", function(request, response) {
     request.checkBody("confirmation", "Password confirmation is required.").notEmpty();
     request.checkBody("confirmation", "Passwords must match.").equals(request.body.password);
 
+    // validate
     request.getValidationResult().then(function(errors) {
 
         // form errors
         if(!errors.isEmpty()) {
             response.render("register", {errors: errors.array()});
+            return;
         }
 
         // hash password
@@ -89,39 +80,15 @@ router.post("/register", function(request, response) {
                 if(err) {
                     let errors = [{msg: `User with email '${request.body.email}' already exists.`}];
                     response.render("register", {errors: errors});
+                    return;
                 }
 
                 // user registration success
                 response.redirect("login");
+                return;
 
             });
         });
-    });
-});
-
-
-router.delete("/remove/:id", function(request, response) {
-
-    let id = request.params.id;
-
-    User.findByIdAndRemove(id, function(err, user) {
-
-        if(err) {
-            console.log(err);
-            throw err;
-        }
-        else if (user === null) {
-            // descriptive message
-            let message = `User with ID '${id}' does not exist.`;
-
-            // send response
-            response.status(404);
-            response.json( {message: message, error: err} );
-        }
-
-        // user delete success
-        response.json(user);
-
     });
 });
 
