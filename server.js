@@ -6,6 +6,7 @@ const passport   = require("./middleware/passport");
 const express    = require("express");
 const session    = require("express-session");
 const cookie     = require("cookie-parser");
+const dotenv     = require("dotenv");
 const logger     = require("./middleware/logger");
 const flash      = require("connect-flash");
 const index      = require("./routes/index");
@@ -16,8 +17,11 @@ const user       = require("./routes/user");
 const app = express();
 
 
+// load env variables
+dotenv.config();
+
+
 // create database
-const mongo_dev = "mongodb://admin:password@ds159662.mlab.com:59662/node-web-app-template";
 mongoose.connect(process.env.MONGODB_URI || mongo_dev, {useMongoClient: true});
 
 
@@ -75,7 +79,8 @@ app.use("/user", user);
 
 
 // start application
-const port = process.env.PORT || 3000;
-app.listen(port, function() {
-    console.log("Server listening on port %s.", port);
+app.listen(process.env.PORT, function() {
+
+    console.log("Server listening on port %s.", process.env.PORT);
+
 });
