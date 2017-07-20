@@ -17,7 +17,8 @@ const app = express();
 
 
 // create database
-mongoose.connect("mongodb://admin:password@ds159662.mlab.com:59662/node-web-app-template", {useMongoClient: true});
+const mongo_dev = "mongodb://admin:password@ds159662.mlab.com:59662/node-web-app-template";
+mongoose.connect(process.env.MONGODB_URI || mongo_dev, {useMongoClient: true});
 
 
 // app settings
