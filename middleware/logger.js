@@ -23,6 +23,7 @@ function log(request, response, next) {
 
     // next middleware
     next();
+
 }
 
 

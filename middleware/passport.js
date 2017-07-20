@@ -32,8 +32,8 @@ let strat = new Strategy({usernameField: "email"}, function(email, password, don
             }
 
             return done(null, user);
-        });
 
+        });
     });
 });
 
@@ -42,15 +42,20 @@ passport.use(strat);
 
 
 passport.serializeUser(function(user, done) {
+
     done(null, user.id);
+
 });
 
 
 passport.deserializeUser(function(id, done) {
+
     User.findById(id, function(err, user) {
         done(err, user);
     });
+
 });
 
 
+// exports
 module.exports = passport;

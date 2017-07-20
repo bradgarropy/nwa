@@ -10,9 +10,10 @@ function encrypt(password, callback) {
                 console.log(err);
                 throw err;
             }
-            else {
-                callback(err, hash);
-            }
+
+            callback(err, hash);
+            return;
+
         });
     });
 }
@@ -26,9 +27,10 @@ function validate(password, hash, callback) {
             console.log(err);
             throw err;
         }
-        else {
-            callback(err, result);
-        }
+
+        callback(err, result);
+        return;
+
     });
 }
 

@@ -14,11 +14,5 @@ var userSchema = mongoose.Schema({
 var User = mongoose.model("User", userSchema);
 
 
-function destroy(id, callback) {
-
-    User.findByIdAndRemove(id, callback);
-}
-
-
 // exports
 module.exports = User;
