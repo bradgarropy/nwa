@@ -20,10 +20,13 @@ html
                 li
                     a(href="/user/login") Login
         
+        if settings.env === "development"
+            span(class="center-block label label-warning") Development
+        
         div(class="container")
-            
+    
             block content
-                    
+
         // jquery
         script(src="https://code.jquery.com/jquery-3.2.1.min.js")
 
