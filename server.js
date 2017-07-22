@@ -21,7 +21,7 @@ dotenv.config();
 
 
 // create database
-mongoose.connect(process.env.MONGODB_URI || mongo_dev, {useMongoClient: true});
+mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
 
 
 // app settings
