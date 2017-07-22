@@ -16,7 +16,6 @@ const user       = require("./routes/user");
 // create application
 const app = express();
 
-
 // load env variables
 dotenv.config();
 
