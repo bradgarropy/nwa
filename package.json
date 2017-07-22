@@ -4,7 +4,7 @@
   "description": "Node web application template complete with REST API and database support!",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jshint .",
     "start": "node server.js"
   },
   "repository": {
