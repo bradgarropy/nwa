@@ -4,7 +4,7 @@
   "description": "Node web application template complete with REST API and database support!",
   "main": "server.js",
   "scripts": {
-    "test": "jshint .",
+    "test": "jshint . ; nsp check",
     "start": "node server.js"
   },
   "repository": {
@@ -43,6 +43,7 @@
     "express-messages": "^1.0.1",
     "express-session": "^1.15.3",
     "express-validator": "^3.2.1",
+    "helmet": "^3.8.0",
     "moment": "^2.18.1",
     "mongoose": "^4.11.2",
     "passport": "^0.3.2",
