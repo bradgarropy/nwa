@@ -3,23 +3,37 @@ html
     head
         // bootstrap css
         link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        
+        // custom css
+        link(rel="stylesheet" href="/css/style.css")
     
     body
         
-        ul(class="nav nav-tabs")
+        nav(class="navbar navbar-default")
             
-            li
-                a(href="/") Home
+            div(class="container-fluid")
             
-            if user
-                li
-                    a(href="/user/logout") Logout
-            else
-                li
-                    a(href="/user/register") Register
-                li
-                    a(href="/user/login") Login
-        
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/") Home
+                        
+                    li
+                        a(href="/weight") Weight
+
+                ul(class="nav navbar-nav navbar-right")
+                    if user
+                        li
+                            p(class="navbar-text")
+                                b #{user.first_name}
+                        
+                        li
+                            a(href="/user/logout") Logout
+                    else
+                        li
+                            a(href="/user/register") Register
+                        li
+                            a(href="/user/login") Login
+
         if settings.env === "development"
             span(class="center-block label label-warning") Development
         
