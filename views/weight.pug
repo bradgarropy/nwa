@@ -1,16 +1,22 @@
 extends layout.pug
 
 
-block content    
+block content
 
     h1 WEIGHT
-    
+
+    // weight errors
+    if errors
+        for error in errors
+            div(class="alert alert-danger") #{error.msg}
+
+    // weight form
     form(method="post" action="/weight")
 
         div(class="form-group")
             label Date
             input(type="date" name="date" class="form-control")
-        
+
         div(class="form-group")
             label Weight
             input(type="number" name="weight" class="form-control")
