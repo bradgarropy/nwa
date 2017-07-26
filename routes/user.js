@@ -84,7 +84,7 @@ router.post("/register", function(request, response) {
                 }
 
                 // user registration success
-                response.redirect("login");
+                response.redirect("/user/login");
                 return;
 
             });
