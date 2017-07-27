@@ -3,7 +3,9 @@ extends layout.pug
 
 block content
 
-    h1 WEIGHT
+    h1 Weight
+    
+    br
 
     // weight errors
     if errors
@@ -22,3 +24,17 @@ block content
             input(type="number" name="weight" class="form-control")
 
         button(type="submit" class="btn btn-default") Submit
+
+    br
+
+    // user weights
+    table(class="table table-bordered table-striped table-hover")
+        
+        tr
+            th Date
+            th Weight
+        
+        for weight in weights
+            tr
+                td #{moment(weight.date).utc().format("MM/DD/YYYY")}
+                td #{weight.weight}
