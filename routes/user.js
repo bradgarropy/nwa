@@ -19,7 +19,7 @@ router.get("/login", function(request, response) {
 
 router.post("/login", passport.authenticate("local"), function(request, response) {
 
-    response.redirect("/");
+    response.redirect("/weight");
     return;
 
 });
@@ -72,13 +72,17 @@ router.post("/register", function(request, response) {
             }
 
             // create user
-            request.body.password = hash;
+            let user = new User();
+            user.first_name = request.body.first_name;
+            user.last_name  = request.body.last_name;
+            user.email      = request.body.email;
+            user.password   = hash;
 
-            User.create(request.body, function(err, doc) {
+            User.create(user, function(err, doc) {
 
                 // db create error
                 if(err) {
-                    let errors = [{msg: `User with email '${request.body.email}' already exists.`}];
+                    let errors = [{msg: `User with email '${user.email}' already exists.`}];
                     response.render("register", {errors: errors});
                     return;
                 }

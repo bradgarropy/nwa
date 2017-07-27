@@ -9,9 +9,19 @@ const router = express.Router();
 
 router.get("/", function(request, response) {
 
-    response.render("weight");
-    return;
+    Weight.find({"user_id": request.user._id}, function(err, weights) {
 
+        // db find error
+        if(err) {
+            console.log(err);
+            response.redirect("/");
+            return;
+        }
+
+        response.render("weight", {"weights": weights, "moment": require("moment")});
+        return;
+
+    });
 });
 
 
