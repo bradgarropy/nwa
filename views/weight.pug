@@ -31,10 +31,14 @@ block content
     table(class="table table-bordered table-striped table-hover")
         
         tr
-            th Date
-            th Weight
+            th(class="text-center") Date
+            th(class="text-center") Weight
+            th(class="text-center")
         
         for weight in weights
             tr
-                td #{moment(weight.date).utc().format("MM/DD/YYYY")}
-                td #{weight.weight}
+                td(class="text-center") #{moment(weight.date).utc().format("MM/DD/YYYY")}
+                td(class="text-center") #{weight.weight}
+                td(class="text-center")
+                    a(href="#")
+                        span(class="glyphicon glyphicon-trash text-danger")
