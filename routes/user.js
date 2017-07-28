@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/login", function(request, response) {
 
-    response.render("login");
+    response.render("user/login");
     return;
 
 });
@@ -34,9 +34,58 @@ router.get("/logout", function(request, response) {
 });
 
 
+router.get("/profile", function(request, response) {
+
+    response.render("user/profile");
+    return;
+
+});
+
+
+router.post("/profile", function(request, response) {
+
+    // validation rules
+    request.checkBody("first_name", "First name is required.").notEmpty();
+    request.checkBody("last_name",  "Last name is required.").notEmpty();
+    request.checkBody("email",      "Email is required.").notEmpty();
+    request.checkBody("email",      "Please enter a valid email.").isEmail();
+
+    // validate
+    request.getValidationResult().then(function(errors) {
+
+        // form errors
+        if(!errors.isEmpty()) {
+            response.render("user/profile", {errors: errors.array()});
+            return;
+        }
+
+        // create user
+        let user = {};
+        user.first_name = request.body.first_name;
+        user.last_name  = request.body.last_name;
+        user.email      = request.body.email;
+
+        User.findByIdAndUpdate(request.user._id, user, function(err, doc) {
+
+            // db create error
+            if(err) {
+                let errors = [{msg: "We encountered an issue updating your user profile."}];
+                response.render("user/profile", {errors: errors});
+                return;
+            }
+
+            // user registration success
+            response.redirect("/user/profile");
+            return;
+
+        });
+    });
+});
+
+
 router.get("/register", function(request, response) {
 
-    response.render("register");
+    response.render("user/register");
     return;
 
 });
@@ -58,7 +107,7 @@ router.post("/register", function(request, response) {
 
         // form errors
         if(!errors.isEmpty()) {
-            response.render("register", {errors: errors.array()});
+            response.render("user/register", {errors: errors.array()});
             return;
         }
 
@@ -83,7 +132,7 @@ router.post("/register", function(request, response) {
                 // db create error
                 if(err) {
                     let errors = [{msg: `User with email '${user.email}' already exists.`}];
-                    response.render("register", {errors: errors});
+                    response.render("user/register", {errors: errors});
                     return;
                 }
 
