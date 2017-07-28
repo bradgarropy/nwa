@@ -16,11 +16,13 @@ html
                 ul.nav.navbar-nav
                     
                     li
-                        a(href="/") Home
+                        a(href="/")
+                            span.glyphicon.glyphicon-home
                     
                     if user
                         li
-                            a(href="/weight") Weight
+                            a(href="/weight")
+                                span.glyphicon.glyphicon-scale
 
                 ul.nav.navbar-nav.navbar-right
                     
@@ -29,6 +31,7 @@ html
                         li.dropdown
                             
                             a.dropdown-toggle(href="#", data-toggle="dropdown") #{user.first_name} 
+                                span.glyphicon.glyphicon-user
                                 span.caret
                             
                             ul.dropdown-menu
