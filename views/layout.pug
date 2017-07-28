@@ -2,18 +2,19 @@ html
     
     head
         // bootstrap css
-        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
         
         // custom css
-        link(rel="stylesheet" href="/css/style.css")
+        link(rel="stylesheet", href="/css/style.css")
     
     body
         
-        nav(class="navbar navbar-default")
+        nav.navbar.navbar-default
             
-            div(class="container-fluid")
+            div.container-fluid
             
-                ul(class="nav navbar-nav")
+                ul.nav.navbar-nav
+                    
                     li
                         a(href="/") Home
                     
@@ -21,24 +22,33 @@ html
                         li
                             a(href="/weight") Weight
 
-                ul(class="nav navbar-nav navbar-right")
+                ul.nav.navbar-nav.navbar-right
+                    
                     if user
-                        li
-                            p(class="navbar-text")
-                                b #{user.first_name}
                         
-                        li
-                            a(href="/user/logout") Logout
+                        li.dropdown
+                            
+                            a.dropdown-toggle(href="#", data-toggle="dropdown") #{user.first_name} 
+                                span.caret
+                            
+                            ul.dropdown-menu
+                                li
+                                    a(href="/user/profile") Profile
+                                li
+                                    a(href="/user/logout") Logout
+
                     else
+
                         li
                             a(href="/user/register") Register
+
                         li
                             a(href="/user/login") Login
 
         if settings.env === "development"
-            span(class="center-block label label-warning") Development
+            span.center-block.label.label-warning Development
         
-        div(class="container")
+        div.container
     
             block content
 

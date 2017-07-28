@@ -1,0 +1,38 @@
+extends ../layout.pug
+
+
+block content    
+
+    h1 Register
+    
+    br
+
+    // registration errors
+    if errors
+        for error in errors
+            div.alert.alert-danger #{error.msg}
+    
+    // registration form
+    form(method="post" action="/user/register")
+        
+        div.form-group
+            label First Name
+            input.form-control(type="text" name="first_name" placeholder="First Name")
+        
+        div.form-group
+            label Last Name
+            input.form-control(type="text" name="last_name" placeholder="Last Name")
+
+        div.form-group
+            label Email
+            input.form-control(type="email" name="email" placeholder="Email")
+        
+        div.form-group
+            label Password
+            input.form-control(type="password" name="password" placeholder="Password")
+                
+        div.form-group
+            label Confirm Password
+            input.form-control(type="password" name="confirmation" placeholder="Confirm Password")
+
+        button.btn.btn-default(type="submit") Submit

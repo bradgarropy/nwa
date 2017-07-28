@@ -1,0 +1,30 @@
+extends ../layout.pug
+
+
+block content    
+
+    h1 Profile
+    
+    br
+
+    // registration errors
+    if errors
+        for error in errors
+            div.alert.alert-danger #{error.msg}
+    
+    // registration form
+    form(method="post" action="/user/profile")
+        
+        div.form-group
+            label First Name
+            input.form-control(type="text" name="first_name" value=user.first_name)
+        
+        div.form-group
+            label Last Name
+            input.form-control(type="text" name="last_name" value=user.last_name)
+
+        div.form-group
+            label Email
+            input.form-control(type="email" name="email" value=user.email)
+
+        button.btn.btn-default(type="submit") Update
