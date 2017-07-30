@@ -74,10 +74,83 @@ router.post("/profile", function(request, response) {
                 return;
             }
 
-            // user registration success
+            // profile update success
             response.redirect("/user/profile");
             return;
 
+        });
+    });
+});
+
+
+router.get("/password", function(request, response) {
+
+    response.render("user/password");
+    return;
+
+});
+
+
+router.post("/password", function(request, response) {
+
+    // validation rules
+    request.checkBody("current_password", "Current password is required.").notEmpty();
+    request.checkBody("new_password",     "New password is required.").notEmpty();
+    request.checkBody("confirmation",     "Password confirmation is required.").notEmpty();
+    request.checkBody("confirmation",     "Passwords must match.").equals(request.body.new_password);
+
+    // validate
+    request.getValidationResult().then(function(errors) {
+
+        // form errors
+        if(!errors.isEmpty()) {
+            response.render("user/password", {errors: errors.array()});
+            return;
+        }
+
+        password.validate(request.body.current_password, request.user.password, function(err, result) {
+
+            // password validate error
+            if(err) {
+                let errors = [{msg: "We encountered an issue validating your password."}];
+                response.render("user/password", {errors: errors});
+                return;
+            }
+
+            if(!result) {
+                let errors = [{msg: "Incorrect password."}];
+                response.render("user/password", {errors: errors});
+                return;
+            }
+
+            password.encrypt(request.body.new_password, function(err, hash) {
+
+                // password validate error
+                if(err) {
+                    let errors = [{msg: "We encountered an issue encrypting your password."}];
+                    response.render("user/password", {errors: errors});
+                    return;
+                }
+
+                // create user
+                let user = {};
+                user.password = hash;
+
+                User.findByIdAndUpdate(request.user._id, user, function(err, doc) {
+
+                    // db create error
+                    if(err) {
+                        let errors = [{msg: "We encountered an issue updating your password."}];
+                        response.render("user/profile", {errors: errors});
+                        return;
+                    }
+
+                    // password update success
+                    response.redirect("/user/logout");
+                    return;
+
+                });
+            });
         });
     });
 });
@@ -111,36 +184,26 @@ router.post("/register", function(request, response) {
             return;
         }
 
-        // hash password
-        password.encrypt(request.body.password, function(err, hash) {
+        // create user
+        let user = new User();
+        user.first_name = request.body.first_name;
+        user.last_name  = request.body.last_name;
+        user.email      = request.body.email;
+        user.password   = request.body.password;
 
-            // encryption error
+        User.create(user, function(err, doc) {
+
+            // db create error
             if(err) {
-                console.log(err);
-                throw err;
+                let errors = [{msg: `User with email '${user.email}' already exists.`}];
+                response.render("user/register", {errors: errors});
+                return;
             }
 
-            // create user
-            let user = new User();
-            user.first_name = request.body.first_name;
-            user.last_name  = request.body.last_name;
-            user.email      = request.body.email;
-            user.password   = hash;
+            // user registration success
+            response.redirect("/user/login");
+            return;
 
-            User.create(user, function(err, doc) {
-
-                // db create error
-                if(err) {
-                    let errors = [{msg: `User with email '${user.email}' already exists.`}];
-                    response.render("user/register", {errors: errors});
-                    return;
-                }
-
-                // user registration success
-                response.redirect("/user/login");
-                return;
-
-            });
         });
     });
 });

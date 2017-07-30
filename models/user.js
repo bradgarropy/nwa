@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const password = require("../middleware/password");
 
 
 // define schema
@@ -7,6 +8,28 @@ var userSchema = mongoose.Schema({
     last_name:  { type: String, required: true, unique: false },
     email:      { type: String, required: true, unique: true  },
     password:   { type: String, required: true, unique: false }
+});
+
+// save middleware
+userSchema.pre("save", function(next) {
+
+    let user = this;
+
+    // hash password
+    password.encrypt(user.password, function(err, hash) {
+
+        // encryption error
+        if(err) {
+            console.log(err);
+            throw err;
+        }
+
+        user.password = hash;
+
+        // next middleware
+        next();
+
+    });
 });
 
 
