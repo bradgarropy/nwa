@@ -58,7 +58,12 @@ router.post("/profile", function(request, response) {
 
         // form errors
         if(!errors.isEmpty()) {
-            response.render("user/profile", {errors: errors.array()});
+
+            errors.array().forEach(function(error) {
+                request.flash("danger", error.msg);
+            });
+
+            response.redirect("profile");
             return;
         }
 
@@ -107,7 +112,12 @@ router.post("/password", function(request, response) {
 
         // form errors
         if(!errors.isEmpty()) {
-            response.render("user/password", {errors: errors.array()});
+
+            errors.array().forEach(function(error) {
+                request.flash("danger", error.msg);
+            });
+
+            response.redirect("password");
             return;
         }
 
@@ -300,6 +310,11 @@ router.post("/reset/:token", function(request, response) {
 
             // form errors
             if(!errors.isEmpty()) {
+
+                errors.array().forEach(function(error) {
+                    request.flash("danger", error.msg);
+                });
+
                 response.redirect("back");
                 return;
             }
@@ -352,7 +367,12 @@ router.post("/register", function(request, response) {
 
         // form errors
         if(!errors.isEmpty()) {
-            response.render("user/register", {errors: errors.array()});
+
+            errors.array().forEach(function(error) {
+                request.flash("danger", error.msg);
+            });
+
+            response.redirect("register");
             return;
         }
 
