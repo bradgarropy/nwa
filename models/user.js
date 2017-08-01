@@ -4,10 +4,12 @@ const password = require("../middleware/password");
 
 // define schema
 var userSchema = mongoose.Schema({
-    first_name: { type: String, required: true, unique: false },
-    last_name:  { type: String, required: true, unique: false },
-    email:      { type: String, required: true, unique: true  },
-    password:   { type: String, required: true, unique: false }
+    first_name:       { type: String, required: true,  unique: false },
+    last_name:        { type: String, required: true,  unique: false },
+    email:            { type: String, required: true,  unique: true  },
+    password:         { type: String, required: true,  unique: false },
+    reset_token:      { type: String, required: false, unique: false },
+    reset_expiration: { type: Date,   required: false, unique: false }
 });
 
 // save middleware

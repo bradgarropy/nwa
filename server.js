@@ -1,7 +1,6 @@
 const bodyparser = require("body-parser");
 const validator  = require("express-validator");
 const mongoose   = require("mongoose");
-const messages   = require("express-messages");
 const passport   = require("./middleware/passport");
 const express    = require("express");
 const session    = require("express-session");
@@ -67,7 +66,10 @@ app.use(function(request, response, next) {
 app.use(function (request, response, next) {
 
     // set messages
-    response.locals.messages = messages(request, response);
+    response.locals.success_messages = request.flash("success");
+    response.locals.info_messages    = request.flash("info");
+    response.locals.warning_messages = request.flash("warning");
+    response.locals.danger_messages  = request.flash("danger");
 
     // next  middleware
     next();

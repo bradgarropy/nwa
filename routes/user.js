@@ -1,8 +1,11 @@
-const validator = require("express-validator");
-const passport  = require("../middleware/passport");
-const password  = require("../middleware/password");
-const express   = require("express");
-const User      = require("../models/user");
+const nodemailer = require("nodemailer");
+const validator  = require("express-validator");
+const passport   = require("../middleware/passport");
+const password   = require("../middleware/password");
+const express    = require("express");
+const crypto     = require("crypto");
+const User       = require("../models/user");
+const url        = require("url");
 
 
 // create router
@@ -150,6 +153,175 @@ router.post("/password", function(request, response) {
                     return;
 
                 });
+            });
+        });
+    });
+});
+
+
+router.get("/forgot", function(request, response) {
+
+    response.render("user/forgot");
+    return;
+
+});
+
+
+router.post("/forgot", function(request, response) {
+
+    // validation rules
+    request.checkBody("email", "Email is required.").notEmpty();
+    request.checkBody("email", "Please enter a valid email.").isEmail();
+
+    // identify user
+    User.findOne({email: request.body.email}, function(err, user) {
+
+        // db find error
+        if(err) {
+            let errors = [{msg: "There was an issue searching the database."}];
+            response.render("user/forgot", {errors: errors});
+            return;
+        }
+
+        // user not found
+        if(!user) {
+            let errors = [{msg: "User with that email does not exist."}];
+            response.render("user/forgot", {errors: errors});
+            return;
+        }
+
+        // generate reset token
+        crypto.randomBytes(20, function(err, buffer) {
+
+            // crypto error
+            if(err) {
+                let errors = [{msg: "There was an issue generating your password reset token."}];
+                response.render("user/forgot", {errors: errors});
+                return;
+            }
+
+            // convert bytes to string
+            user.reset_token      = buffer.toString("hex");
+            user.reset_expiration = Date.now() + 1800000;
+
+            user.save(function(err, user) {
+
+                // db save error
+                if(err) {
+                    let errors = [{msg: "There was an issue saving the password reset token."}];
+                    response.render("user/forgot", {errors: errors});
+                    return;
+                }
+
+                let transport_options = {host: "smtp.mailgun.org",
+                                         auth: {user: "postmaster@sandbox16627056caa54629a1bcbae849da5219.mailgun.org",
+                                                pass: "af4fa6aa4db353ee4c704c9cf9aa50f2"}};
+
+                // create email transport
+                let transport = nodemailer.createTransport(transport_options);
+
+                let link = "http://" + request.headers.host + "/user/reset/" + user.reset_token;
+
+                let mail_options = {to:      user.email,
+                                    from:    "nwa-local@localhost",
+                                    subject: "Password Reset",
+                                    html:    `<p>Please click on this link to reset your password.</p> \
+                                              <br> \
+                                              <a href="${link}">${link}</a>`};
+
+                transport.sendMail(mail_options, function(err, info) {
+
+                    // email error
+                    if(err) {
+                        let errors = [{msg: "We were unable to send your password reset email."}];
+                        response.render("user/forgot", {errors: errors});
+                        return;
+                    }
+
+                    // user email success
+                    response.redirect("/");
+                    return;
+
+                });
+
+            });
+        });
+    });
+});
+
+
+router.get("/reset/:token", function(request, response) {
+
+    User.findOne({reset_token: request.params.token}, function(err, user) {
+
+        if(!user) {
+            let errors = [{msg: "Password reset token is invalid."}];
+            response.render("user/forgot", {errors: errors});
+            return;
+        }
+
+        if(user.reset_expiration < Date.now()) {
+            let errors = [{msg: "Password reset token has expired."}];
+            response.render("user/forgot", {errors: errors});
+            return;
+        }
+
+        // reset token success
+        response.render("user/reset");
+        return;
+
+    });
+});
+
+
+router.post("/reset/:token", function(request, response) {
+
+    User.findOne({reset_token: request.params.token}, function(err, user) {
+
+        if(!user) {
+            let errors = [{msg: "Password reset token is invalid."}];
+            response.redirect("back");
+            return;
+        }
+
+        if(user.reset_expiration < Date.now()) {
+            let errors = [{msg: "Password reset token has expired."}];
+            response.redirect("back");
+            return;
+        }
+
+        // validation rules
+        request.checkBody("password",     "New password is required.").notEmpty();
+        request.checkBody("confirmation", "Password confirmation is required.").notEmpty();
+        request.checkBody("confirmation", "Passwords must match.").equals(request.body.password);
+
+        // validate
+        request.getValidationResult().then(function(errors) {
+
+            // form errors
+            if(!errors.isEmpty()) {
+                response.redirect("back");
+                return;
+            }
+
+            // update user
+            user.password         = request.body.password;
+            user.reset_token      = undefined;
+            user.reset_expiration = undefined;
+
+            user.save(function(err, user) {
+
+                // db save error
+                if(err) {
+                    let errors = [{msg: "There was an issue updating the password."}];
+                    response.redirect("back");
+                    return;
+                }
+
+                // password reset success
+                response.render("user/login");
+                return;
+
             });
         });
     });

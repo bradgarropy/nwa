@@ -1,0 +1,15 @@
+if success_messages
+    for message in success_messages
+        div.alert.alert-success #{message}
+        
+if info_messages
+    for message in info_messages
+        div.alert.alert-info #{message}
+        
+if warning_messages
+    for message in warning_messages
+        div.alert.alert-warning #{message}
+
+if danger_messages
+    for message in danger_messages
+        div.alert.alert-danger #{message}

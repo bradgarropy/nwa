@@ -1,0 +1,38 @@
+nav.navbar.navbar-default
+    
+    div.container-fluid
+    
+        ul.nav.navbar-nav
+            
+            li
+                a(href="/")
+                    span.glyphicon.glyphicon-home
+            
+            if user
+                li
+                    a(href="/weight")
+                        span.glyphicon.glyphicon-scale
+
+        ul.nav.navbar-nav.navbar-right
+            
+            if user
+                
+                li.dropdown
+                    
+                    a.dropdown-toggle(href="#", data-toggle="dropdown") #{user.first_name} 
+                        span.glyphicon.glyphicon-user
+                        span.caret
+                    
+                    ul.dropdown-menu
+                        li
+                            a(href="/user/profile") Profile
+                        li
+                            a(href="/user/logout") Logout
+
+            else
+
+                li
+                    a(href="/user/register") Register
+
+                li
+                    a(href="/user/login") Login

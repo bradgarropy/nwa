@@ -3,7 +3,7 @@ extends ../layout.pug
 
 block content    
             
-    h1 Login
+    h1 Reset
     
     br
         
@@ -12,17 +12,14 @@ block content
         for error in errors
             div.alert.alert-danger #{error.msg}
     
-    form(method="post" action="/user/login")
+    form(method="post")
 
-        div.form-group
-            label Email
-            input.form-control(type="email" name="email" placeholder="Email")
-        
         div.form-group
             label Password
             input.form-control(type="password" name="password" placeholder="Password")
+                
+        div.form-group
+            label Confirm Password
+            input.form-control(type="password" name="confirmation" placeholder="Confirm Password")
 
         button.btn.btn-default(type="submit") Submit
-        
-        div.pull-right
-            a(href="/user/forgot") Forgot Password?

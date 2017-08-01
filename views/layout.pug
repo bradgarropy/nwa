@@ -1,62 +1,20 @@
 html
     
     head
-        // bootstrap css
-        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
         
-        // custom css
-        link(rel="stylesheet", href="/css/style.css")
+        include includes/head
     
     body
         
-        nav.navbar.navbar-default
-            
-            div.container-fluid
-            
-                ul.nav.navbar-nav
-                    
-                    li
-                        a(href="/")
-                            span.glyphicon.glyphicon-home
-                    
-                    if user
-                        li
-                            a(href="/weight")
-                                span.glyphicon.glyphicon-scale
-
-                ul.nav.navbar-nav.navbar-right
-                    
-                    if user
-                        
-                        li.dropdown
-                            
-                            a.dropdown-toggle(href="#", data-toggle="dropdown") #{user.first_name} 
-                                span.glyphicon.glyphicon-user
-                                span.caret
-                            
-                            ul.dropdown-menu
-                                li
-                                    a(href="/user/profile") Profile
-                                li
-                                    a(href="/user/logout") Logout
-
-                    else
-
-                        li
-                            a(href="/user/register") Register
-
-                        li
-                            a(href="/user/login") Login
+        include includes/navigation
 
         if settings.env === "development"
             span.center-block.label.label-warning Development
         
         div.container
+            
+            include includes/messages
     
             block content
 
-        // jquery
-        script(src="https://code.jquery.com/jquery-3.2.1.min.js")
-
-        // bootstrap js
-        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+        include includes/scripts
