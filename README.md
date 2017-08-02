@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/bradgarropy/nwa.svg)](https://travis-ci.org/bradgarropy/nwa)
 [![NSP Status](https://nodesecurity.io/orgs/brad-garropy/projects/27126b8e-87c8-46a5-bf73-80ea79993e3b/badge)](https://nodesecurity.io/orgs/brad-garropy/projects/27126b8e-87c8-46a5-bf73-80ea79993e3b)
 
-![NWA](https://raw.githubusercontent.com/bradgarropy/nwa/dev/nwa.jpg)
 ![NWA](https://raw.githubusercontent.com/bradgarropy/nwa/dev/nwa.png)
 
 *This template is a continuation of the [node-only-server](https://github.com/bradgarropy/node-only-server) I created. The goal was to extend that learning experience into an actual template I could use to produce web applications faster. Hope you like it! :wink:*
