@@ -69,6 +69,7 @@ app.use(function (request, response, next) {
     response.locals.success_messages = request.flash("success");
     response.locals.info_messages    = request.flash("info");
     response.locals.warning_messages = request.flash("warning");
+    response.locals.error_messages   = request.flash("error");
     response.locals.danger_messages  = request.flash("danger");
 
     // next  middleware

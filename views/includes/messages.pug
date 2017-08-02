@@ -9,6 +9,10 @@ if info_messages
 if warning_messages
     for message in warning_messages
         div.alert.alert-warning #{message}
+        
+if error_messages
+    for message in error_messages
+        div.alert.alert-danger #{message}
 
 if danger_messages
     for message in danger_messages

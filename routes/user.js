@@ -20,9 +20,14 @@ router.get("/login", function(request, response) {
 });
 
 
-router.post("/login", passport.authenticate("local"), function(request, response) {
+router.post("/login", function(request, response, next) {
 
-    response.redirect("/weight");
+    let options = {successRedirect: "/",
+                   failureRedirect: "/user/login",
+                   failureFlash:    "Invalid username or password."};
+
+    // authenticate user
+    passport.authenticate("local", options) (request, response, next);
     return;
 
 });
@@ -63,7 +68,7 @@ router.post("/profile", function(request, response) {
                 request.flash("danger", error.msg);
             });
 
-            response.redirect("profile");
+            response.redirect("/user/profile");
             return;
         }
 
@@ -77,8 +82,8 @@ router.post("/profile", function(request, response) {
 
             // db create error
             if(err) {
-                let errors = [{msg: "We encountered an issue updating your user profile."}];
-                response.render("user/profile", {errors: errors});
+                request.flash("danger", "We encountered an issue updating your user profile.");
+                response.redirect("/user/profile");
                 return;
             }
 
@@ -117,7 +122,7 @@ router.post("/password", function(request, response) {
                 request.flash("danger", error.msg);
             });
 
-            response.redirect("password");
+            response.redirect("/user/password");
             return;
         }
 
@@ -125,14 +130,14 @@ router.post("/password", function(request, response) {
 
             // password validate error
             if(err) {
-                let errors = [{msg: "We encountered an issue validating your password."}];
-                response.render("user/password", {errors: errors});
+                request.flash("danger", "We encountered an issue validating your password.");
+                response.redirect("/user/password");
                 return;
             }
 
             if(!result) {
-                let errors = [{msg: "Incorrect password."}];
-                response.render("user/password", {errors: errors});
+                request.flash("danger", "Incorrect password.");
+                response.redirect("/user/password");
                 return;
             }
 
@@ -140,8 +145,8 @@ router.post("/password", function(request, response) {
 
                 // password validate error
                 if(err) {
-                    let errors = [{msg: "We encountered an issue encrypting your password."}];
-                    response.render("user/password", {errors: errors});
+                    request.flash("danger", "We encountered an issue encrypting your password.");
+                    response.redirect("/user/password");
                     return;
                 }
 
@@ -153,8 +158,8 @@ router.post("/password", function(request, response) {
 
                     // db create error
                     if(err) {
-                        let errors = [{msg: "We encountered an issue updating your password."}];
-                        response.render("user/profile", {errors: errors});
+                        request.flash("danger", "We encountered an issue updating your password.");
+                        response.redirect("/user/profile");
                         return;
                     }
 
@@ -188,15 +193,15 @@ router.post("/forgot", function(request, response) {
 
         // db find error
         if(err) {
-            let errors = [{msg: "There was an issue searching the database."}];
-            response.render("user/forgot", {errors: errors});
+            request.flash("danger", "There was an issue searching the database.");
+            response.redirect("/user/forgot");
             return;
         }
 
         // user not found
         if(!user) {
-            let errors = [{msg: "User with that email does not exist."}];
-            response.render("user/forgot", {errors: errors});
+            request.flash("danger", "User with that email does not exist.");
+            response.redirect("/user/forgot");
             return;
         }
 
@@ -205,8 +210,8 @@ router.post("/forgot", function(request, response) {
 
             // crypto error
             if(err) {
-                let errors = [{msg: "There was an issue generating your password reset token."}];
-                response.render("user/forgot", {errors: errors});
+                request.flash("danger", "There was an issue generating your password reset token.");
+                response.redirect("/user/forgot");
                 return;
             }
 
@@ -218,8 +223,8 @@ router.post("/forgot", function(request, response) {
 
                 // db save error
                 if(err) {
-                    let errors = [{msg: "There was an issue saving the password reset token."}];
-                    response.render("user/forgot", {errors: errors});
+                    request.flash("danger", "There was an issue saving the password reset token.");
+                    response.redirect("/user/forgot");
                     return;
                 }
 
@@ -243,8 +248,8 @@ router.post("/forgot", function(request, response) {
 
                     // email error
                     if(err) {
-                        let errors = [{msg: "We were unable to send your password reset email."}];
-                        response.render("user/forgot", {errors: errors});
+                        request.flash("danger", "We were unable to send your password reset email.");
+                        response.redirect("/user/forgot");
                         return;
                     }
 
@@ -265,14 +270,14 @@ router.get("/reset/:token", function(request, response) {
     User.findOne({reset_token: request.params.token}, function(err, user) {
 
         if(!user) {
-            let errors = [{msg: "Password reset token is invalid."}];
-            response.render("user/forgot", {errors: errors});
+            request.flash("danger", "Password reset token is invalid.");
+            response.redirect("/user/forgot");
             return;
         }
 
         if(user.reset_expiration < Date.now()) {
-            let errors = [{msg: "Password reset token has expired."}];
-            response.render("user/forgot", {errors: errors});
+            request.flash("danger", "Password reset token has expired.");
+            response.redirect("/user/forgot");
             return;
         }
 
@@ -289,13 +294,13 @@ router.post("/reset/:token", function(request, response) {
     User.findOne({reset_token: request.params.token}, function(err, user) {
 
         if(!user) {
-            let errors = [{msg: "Password reset token is invalid."}];
+            request.flash("danger", "Password reset token is invalid.");
             response.redirect("back");
             return;
         }
 
         if(user.reset_expiration < Date.now()) {
-            let errors = [{msg: "Password reset token has expired."}];
+            request.flash("danger", "Password reset token has expired.");
             response.redirect("back");
             return;
         }
@@ -328,7 +333,7 @@ router.post("/reset/:token", function(request, response) {
 
                 // db save error
                 if(err) {
-                    let errors = [{msg: "There was an issue updating the password."}];
+                    request.flash("danger", "There was an issue updating the password.");
                     response.redirect("back");
                     return;
                 }
@@ -372,7 +377,7 @@ router.post("/register", function(request, response) {
                 request.flash("danger", error.msg);
             });
 
-            response.redirect("register");
+            response.redirect("/user/register");
             return;
         }
 
@@ -387,8 +392,8 @@ router.post("/register", function(request, response) {
 
             // db create error
             if(err) {
-                let errors = [{msg: `User with email '${user.email}' already exists.`}];
-                response.render("user/register", {errors: errors});
+                request.flash("danger", `User with email '${user.email}' already exists.`);
+                response.redirect("/user/register");
                 return;
             }
 
