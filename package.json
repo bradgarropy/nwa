@@ -1,7 +1,7 @@
 {
   "name": "node-web-app-template",
   "version": "0.0.1",
-  "description": "Node web application template complete with REST API and database support!",
+  "description": "Node Web Application - Template!",
   "main": "server.js",
   "scripts": {
     "test": "jshint . ; nsp check",
@@ -25,7 +25,12 @@
     "rest-api",
     "web-server",
     "web-app",
-    "web-application"
+    "web-application",
+    "passport",
+    "passportjs",
+    "passport-local",
+    "dotenv",
+    "nodemailer"
   ],
   "author": "Brad Garropy",
   "license": "ISC",
