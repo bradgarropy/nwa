@@ -228,9 +228,9 @@ router.post("/forgot", function(request, response) {
                     return;
                 }
 
-                let transport_options = {host: "smtp.mailgun.org",
-                                         auth: {user: "postmaster@sandbox16627056caa54629a1bcbae849da5219.mailgun.org",
-                                                pass: "af4fa6aa4db353ee4c704c9cf9aa50f2"}};
+                let transport_options = {host: process.env.SMTP_HOSTNAME,
+                                         auth: {user: process.env.SMTP_USERNAME,
+                                                pass: process.env.SMTP_PASSWORD}};
 
                 // create email transport
                 let transport = nodemailer.createTransport(transport_options);
@@ -238,7 +238,7 @@ router.post("/forgot", function(request, response) {
                 let link = "http://" + request.headers.host + "/user/reset/" + user.reset_token;
 
                 let mail_options = {to:      user.email,
-                                    from:    "nwa-local@localhost",
+                                    from:    "Node Web Application",
                                     subject: "Password Reset",
                                     html:    `<p>Please click on this link to reset your password.</p> \
                                               <br> \
@@ -258,7 +258,6 @@ router.post("/forgot", function(request, response) {
                     return;
 
                 });
-
             });
         });
     });
