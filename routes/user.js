@@ -238,7 +238,7 @@ router.post("/forgot", function(request, response) {
                 let link = "http://" + request.headers.host + "/user/reset/" + user.reset_token;
 
                 let mail_options = {to:      user.email,
-                                    from:    "Node Web Application",
+                                    from:    {name: "Node Web Application", address: process.env.SMTP_USERNAME},
                                     subject: "Password Reset",
                                     html:    `<p>Please click on this link to reset your password.</p> \
                                               <br> \
