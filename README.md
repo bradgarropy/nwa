@@ -3,6 +3,9 @@
 [![Build Status](https://travis-ci.org/bradgarropy/nwa.svg)](https://travis-ci.org/bradgarropy/nwa)
 [![NSP Status](https://nodesecurity.io/orgs/brad-garropy/projects/27126b8e-87c8-46a5-bf73-80ea79993e3b/badge)](https://nodesecurity.io/orgs/brad-garropy/projects/27126b8e-87c8-46a5-bf73-80ea79993e3b)
 
+![NWA](https://raw.githubusercontent.com/bradgarropy/nwa/dev/nwa.jpg)
+![NWA](https://raw.githubusercontent.com/bradgarropy/nwa/dev/nwa.png)
+
 *This template is a continuation of the [node-only-server](https://github.com/bradgarropy/node-only-server) I created. The goal was to extend that learning experience into an actual template I could use to produce web applications faster. Hope you like it! :wink:*
 
 When I set out to build this template, I wanted to mimic a real application environment as much as possible. To that end, I've created a continuous integration workflow for this app using [Travis CI](https://travis-ci.org/) and [Heroku](https://dashboard.heroku.com/). The strategy was to have two branches, [master](https://github.com/bradgarropy/nwa/tree/master) and [dev](https://github.com/bradgarropy/nwa/tree/dev), which are both automatically built and deployed to [Heroku](https://dashboard.heroku.com/) anytime changes are pushed.
