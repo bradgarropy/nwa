@@ -42,7 +42,7 @@ router.get("/logout", function(request, response) {
 });
 
 
-router.get("/profile", function(request, response) {
+router.get("/profile", passport.ensure_authenticated, function(request, response) {
 
     response.render("user/profile");
     return;
@@ -96,7 +96,7 @@ router.post("/profile", function(request, response) {
 });
 
 
-router.get("/password", function(request, response) {
+router.get("/password", passport.ensure_authenticated, function(request, response) {
 
     response.render("user/password");
     return;

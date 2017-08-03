@@ -57,5 +57,22 @@ passport.deserializeUser(function(id, done) {
 });
 
 
+passport.ensure_authenticated = function(request, response, next) {
+
+    // authenticated
+    if(request.isAuthenticated()) {
+        return next();
+    }
+
+    // unauthenticated
+    else {
+        request.flash("danger", "Please login.");
+        response.redirect("/user/login");
+        return;
+    }
+
+};
+
+
 // exports
 module.exports = passport;
