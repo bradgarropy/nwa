@@ -8,7 +8,6 @@ const cookie     = require("cookie-parser");
 const dotenv     = require("dotenv");
 const helmet     = require("helmet");
 const logger     = require("./middleware/logger");
-const weight     = require("./routes/weight");
 const flash      = require("connect-flash");
 const index      = require("./routes/index");
 const user       = require("./routes/user");
@@ -83,9 +82,6 @@ app.use("/", index);
 
 // user routes
 app.use("/user", user);
-
-// weight routes
-app.use("/weight", weight);
 
 
 // start application

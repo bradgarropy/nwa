@@ -1,5 +1,5 @@
 {
-  "name": "node-web-app-template",
+  "name": "nwa",
   "version": "0.0.1",
   "description": "Node Web Application - Template!",
   "main": "server.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bradgarropy/node-web-app-template.git"
+    "url": "git+https://github.com/bradgarropy/nwa.git"
   },
   "keywords": [
     "javascript",
@@ -35,9 +35,9 @@
   "author": "Brad Garropy",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bradgarropy/node-web-app-template/issues"
+    "url": "https://github.com/bradgarropy/nwa/issues"
   },
-  "homepage": "https://github.com/bradgarropy/node-web-app-template#readme",
+  "homepage": "https://github.com/bradgarropy/nwa#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
