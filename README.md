@@ -67,7 +67,7 @@ This web application integrates multiple technologies to deliver a base set of f
 First, clone the repository.
 
 ```
-git clone https://github.com/bradgarropy/node-express-pug-mongodb-server.git
+git clone https://github.com/bradgarropy/nwa.git
 ```
 
 Next, install the dependencies.
