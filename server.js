@@ -32,10 +32,10 @@ app.set("view engine", "pug");
 
 
 // middleware
+app.use(helmet());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(logger.log);
-app.use(helmet());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookie());
 app.use(session({secret: "keyboard cat", resave: true, saveUninitialized: true}));

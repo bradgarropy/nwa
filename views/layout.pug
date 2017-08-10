@@ -6,15 +6,16 @@ html
     
     body
         
+        include includes/development
+        
         include includes/navigation
-
-        if settings.env === "development"
-            span.center-block.label.label-warning Development
         
         div.container
             
             include includes/messages
     
             block content
+                
+        block scripts
 
-        include includes/scripts
+            include includes/scripts

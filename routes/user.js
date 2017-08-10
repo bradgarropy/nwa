@@ -235,7 +235,7 @@ router.post("/forgot", function(request, response) {
                 // create email transport
                 let transport = nodemailer.createTransport(transport_options);
 
-                let link = "http://" + request.headers.host + "/user/reset/" + user.reset_token;
+                let link = `http://${request.headers.host}/user/reset/${user.reset_token}`;
 
                 let mail_options = {to:      user.email,
                                     from:    {name: "Node Web Application", address: process.env.SMTP_USERNAME},
@@ -403,6 +403,71 @@ router.post("/register", function(request, response) {
         });
     });
 });
+
+
+router.get("/feedback", passport.ensure_authenticated, function(request, response) {
+
+    response.render("user/feedback");
+    return;
+
+});
+
+
+router.post("/feedback", function(request, response) {
+
+    // validation rules
+    request.checkBody("email",    "Email is required.").notEmpty();
+    request.checkBody("email",    "Please enter a valid email.").isEmail();
+    request.checkBody("feedback", "Feedback is required.").notEmpty();
+
+    // validate
+    request.getValidationResult().then(function(errors) {
+
+        // form errors
+        if(!errors.isEmpty()) {
+
+            errors.array().forEach(function(error) {
+                request.flash("danger", error.msg);
+            });
+
+            response.redirect("/user/feedback");
+            return;
+        }
+
+        let email    = request.body.email;
+        let feedback = request.body.feedback;
+        let name     = `${request.user.first_name} ${request.user.last_name}`;
+
+        let transport_options = {host: process.env.SMTP_HOSTNAME,
+                                 auth: {user: process.env.SMTP_USERNAME,
+                                        pass: process.env.SMTP_PASSWORD}};
+
+        // create email transport
+        let transport = nodemailer.createTransport(transport_options);
+
+        let mail_options = {to:      "bradgarropy@gmail.com",
+                            from:    {name: name, address: email},
+                            subject: `NWA - Feedback from ${name}`,
+                            html:    `<p>${feedback}</p>`};
+
+        transport.sendMail(mail_options, function(err, info) {
+
+            // email error
+            if(err) {
+                request.flash("danger", "We were unable to send your feedback email.");
+                response.redirect("/user/feedback");
+                return;
+            }
+
+            // feedback email success
+            request.flash("success", "Thank you for your feedback!");
+            response.redirect("/");
+            return;
+
+        });
+    });
+});
+
 
 
 // exports

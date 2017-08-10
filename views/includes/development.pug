@@ -1,0 +1,8 @@
+if settings.env === "development"
+    
+        div.alert.alert-warning.development-banner
+            
+            div.text-center This site is under development. 
+                
+                if user
+                    | Please give us your #[a(href="/user/feedback") feedback].
