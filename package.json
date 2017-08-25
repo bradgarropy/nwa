@@ -2,10 +2,10 @@
   "name": "nwa",
   "version": "0.0.1",
   "description": "Node Web Application - Template!",
-  "main": "server.js",
+  "main": "template/server.js",
   "scripts": {
     "test": "jshint . ; nsp check",
-    "start": "node server.js"
+    "start": "node template/server.js"
   },
   "repository": {
     "type": "git",
@@ -54,5 +54,13 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.3.0",
+    "nodemon": "^1.11.0"
   }
 }
