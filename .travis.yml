@@ -1,8 +1,9 @@
-language: node_js
+language:
+    - node_js
 
 node_js:
-    - "7"
+    - lts/*
 
-before_script:
-    - npm install -g jshint
-    - npm install -g nsp
+script:
+    - npm run lint
+    - npm run nsp
